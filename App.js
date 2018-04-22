@@ -1,5 +1,6 @@
 import React from 'react'
-import { ActivityIndicator, StyleSheet, TextInput, View, SafeAreaView, StatusBar, WebView } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, TextInput, View, SafeAreaView, StatusBar, WebView } from 'react-native'
+import Menu, { MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu'
 import { Icon } from 'react-native-elements'
 
 export default class App extends React.Component {
@@ -24,43 +25,58 @@ export default class App extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar />
-        <View style={styles.navbar}>
-          {this.state.status !== 'loading'
-            ? <Icon
-              name={statusIconMap[this.state.status]}
-              color='#fff'
-              style={styles.indicator}
+        <MenuProvider>
+          <View style={styles.navbar}>
+            {this.state.status !== 'loading'
+              ? <Icon
+                name={statusIconMap[this.state.status]}
+                color='#fff'
+                style={styles.indicator}
+              />
+              : <ActivityIndicator size='small' color='#fff' />
+            }
+            <TextInput
+              style={[styles.font, styles.addressbar]}
+              autoCapitalize='none'
+              autoCorrect={false}
+              clearButtonMode='while-editing'
+              disableFullscreenUI
+              underlineColorAndroid='transparent'
+              selectionColor='#3498db'
+              value={this.state.typingUrl}
+              placeholder='dat://imstu.bid'
+              onChangeText={text => this.setState({ typingUrl: text })}
+              onSubmitEditing={() => {
+                let url = this.state.typingUrl
+                // In many cases users only enter an url like google.com, we'll need to add a scheme.
+                if (!/^(about|https|http|dat):/i.test(url)) url = 'http://' + url
+                this.setState({ url, updatedUrl: url })
+              }}
             />
-            : <ActivityIndicator size='small' color='#fff' />
-          }
-          <TextInput
-            style={[styles.font, styles.addressbar]}
-            autoCapitalize='none'
-            autoCorrect={false}
-            clearButtonMode='while-editing'
-            disableFullscreenUI
-            underlineColorAndroid='transparent'
-            selectionColor='#3498db'
-            value={this.state.typingUrl}
-            placeholder='dat://imstu.bid'
-            onChangeText={text => this.setState({ typingUrl: text })}
-            onSubmitEditing={() => {
-              let url = this.state.typingUrl
-              // In many cases users only enter an url like google.com, we'll need to add a scheme.
-              if (!/^(about|https|http|dat):/i.test(url)) url = 'http://' + url
-              this.setState({ url, updatedUrl: url })
-            }}
+            <Menu>
+              <MenuTrigger>
+                <Icon
+                  name='more-vert'
+                  color='#fff'
+                  style={[styles.font, styles.menu]}
+                />
+              </MenuTrigger>
+              <MenuOptions>
+                <MenuOption value='refresh' onSelect={() => this.refs['mainFrame'].reload()}>
+                  <Text style={styles.font}>Refresh</Text>
+                </MenuOption>
+                <MenuOption value={2}>
+                  <Text style={styles.font}>About</Text>
+                </MenuOption>
+              </MenuOptions>
+            </Menu>
+          </View>
+          <WebView
+            ref='mainFrame'
+            source={{uri: this.state.updatedUrl}}
+            onNavigationStateChange={this.onNavigation}
           />
-          <Icon
-            name='more-vert'
-            color='#fff'
-            style={styles.menu}
-          />
-        </View>
-        <WebView
-          source={{uri: this.state.updatedUrl}}
-          onNavigationStateChange={this.onNavigation}
-        />
+        </MenuProvider>
       </SafeAreaView>
     )
   }
@@ -90,7 +106,8 @@ const styles = StyleSheet.create({
     paddingLeft: StyleConstants.navbarSpacing,
     paddingRight: StyleConstants.navbarSpacing,
     backgroundColor: '#3498db',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   addressbar: {
     flex: 1,
@@ -106,5 +123,7 @@ const styles = StyleSheet.create({
     shadowColor: '#333',
     elevation: 2, // Android
     shadowOpacity: 1
+  },
+  menu: {
   }
 })
