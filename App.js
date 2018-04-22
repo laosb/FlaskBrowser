@@ -1,6 +1,6 @@
 import React from 'react'
 import { ActivityIndicator, StyleSheet, Text, TextInput, View, SafeAreaView, StatusBar, WebView } from 'react-native'
-import Menu, { MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu'
+import Menu, { MenuProvider, MenuOptions, MenuOption, MenuTrigger, Popover } from 'react-native-popup-menu'
 import { Icon } from 'react-native-elements'
 
 export default class App extends React.Component {
@@ -27,14 +27,69 @@ export default class App extends React.Component {
         <StatusBar />
         <MenuProvider>
           <View style={styles.navbar}>
-            {this.state.status !== 'loading'
-              ? <Icon
-                name={statusIconMap[this.state.status]}
-                color='#fff'
-                style={styles.indicator}
-              />
-              : <ActivityIndicator size='small' color='#fff' />
-            }
+            <Menu renderer={Popover}>
+              <MenuTrigger>
+                {this.state.status !== 'loading'
+                  ? <Icon
+                    name={statusIconMap[this.state.status]}
+                    color='#fff'
+                    style={styles.indicator}
+                  />
+                  : <ActivityIndicator size='small' color='#fff' />
+                }
+              </MenuTrigger>
+              <MenuOptions>
+                {this.state.status === 'loading' &&
+                  <View style={styles.popover}>
+                    <Text style={[styles.font, { fontWeight: 'bold' }]}>
+                      Loading
+                    </Text>
+                    <Text>
+                      The page is in progress of being loaded.
+                    </Text>
+                  </View>
+                }
+                {this.state.status === 'dat' &&
+                  <View style={styles.popover}>
+                    <Text style={[styles.font, { fontWeight: 'bold', color: '#3498db' }]}>
+                      P2P site through Dat
+                    </Text>
+                    <Text>
+                      This site is delivered to you using Dat protocol. Data is encrypted
+                      during peer-to-peer distribution. All data are available to all users
+                      who knows the URL of this site. Censors may learn your IP address when
+                      you are visiting this site.
+                    </Text>
+                  </View>
+                }
+                {this.state.status === 'https' &&
+                  <View style={styles.popover}>
+                    <Text style={[styles.font, { fontWeight: 'bold', color: '#2cbe4e' }]}>
+                      HTTPS site
+                    </Text>
+                    <Text>
+                      This site is served by its servers, encrypted. Sites decides who can
+                      see this page, but your data may not be encrypted on their servers.
+                      Censors may be able to see your data if they have access to site servers.
+                    </Text>
+                  </View>
+                }
+                {this.state.status === 'http' &&
+                  <View style={styles.popover}>
+                    <Text style={[styles.font, { fontWeight: 'bold', color: '#cb2431' }]}>
+                      HTTP site
+                    </Text>
+                    <Text>
+                      This site is served by its servers, unencrypted. Sites decides who can
+                      see this page, but anyone can simply capture what you are seeing or
+                      submitting on its way to site servers. This site is not safe in privacy
+                      at all, and you should avoid submitting any sensitive data on this site.
+                    </Text>
+                  </View>
+                }
+              </MenuOptions>
+            </Menu>
+
             <TextInput
               style={[styles.font, styles.addressbar]}
               autoCapitalize='none'
@@ -124,6 +179,7 @@ const styles = StyleSheet.create({
     elevation: 2, // Android
     shadowOpacity: 1
   },
-  menu: {
+  popover: {
+    padding: 5
   }
 })
