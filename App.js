@@ -85,7 +85,7 @@ const StyleConstants = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#3498db'
   },
   navbar: {
     paddingTop: (StatusBar.currentHeight || 0) + StyleConstants.navbarSpacing,
