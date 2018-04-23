@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, View, SafeAreaView, StatusBar, WebView } f
 import Menu, { MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu'
 import { Icon } from 'react-native-elements'
 
+import I18n from './i18n/'
 import commonStyles from './styles/common'
 import PageIndicator from './components/PageIndicator'
 
@@ -59,10 +60,13 @@ export default class App extends React.Component {
               </MenuTrigger>
               <MenuOptions>
                 <MenuOption value='refresh' onSelect={() => this.refs['mainFrame'].reload()}>
-                  <Text style={commonStyles.font}>Refresh</Text>
+                  <Text style={commonStyles.font}>{I18n.t('controls.refresh')}</Text>
                 </MenuOption>
                 <MenuOption value={2}>
-                  <Text style={commonStyles.font}>About</Text>
+                  <Text style={commonStyles.font}>{I18n.t('controls.about')}</Text>
+                </MenuOption>
+                <MenuOption value={3}>
+                  <Text style={commonStyles.font}>{I18n.currentLocale()}</Text>
                 </MenuOption>
               </MenuOptions>
             </Menu>
