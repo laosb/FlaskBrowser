@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, TextInput, View, SafeAreaView, StatusBar, WebView } from 'react-native'
 import Menu, { MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu'
 import { Icon } from 'react-native-elements'
+import nodejs from 'nodejs-mobile-react-native'
 
 import I18n from './i18n/'
 import commonStyles from './styles/common'
@@ -28,6 +29,16 @@ export default class App extends React.Component {
       StatusBar.setNetworkActivityIndicatorVisible(true)
       this.setState({ status: 'loading' })
     }
+  }
+  componentWillMount () {
+    nodejs.start('main.js')
+    nodejs.channel.addListener(
+      'message',
+      msg => {
+        alert('From node: ' + msg)
+      },
+      this
+    )
   }
   render () {
     return (

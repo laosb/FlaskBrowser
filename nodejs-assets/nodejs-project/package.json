@@ -1,0 +1,8 @@
+{
+  "name": "flask-dat",
+  "version": "0.0.1",
+  "description": "node part of the project",
+  "main": "main.js",
+  "author": "laosb",
+  "license": "MIT"
+}
