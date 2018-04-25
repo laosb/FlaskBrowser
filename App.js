@@ -19,16 +19,20 @@ export default class App extends React.Component {
     this.onNavigation = this.onNavigation.bind(this)
   }
   onNavigation ({ url, loading }) {
+    StatusBar.setNetworkActivityIndicatorVisible(false)
     this.setState({ url, typingUrl: url })
     this.setState({ status: 'http' })
     if (url.startsWith('dat://')) this.setState({ status: 'dat' })
     if (url.startsWith('https://')) this.setState({ status: 'https' })
-    if (loading) this.setState({ status: 'loading' })
+    if (loading) {
+      StatusBar.setNetworkActivityIndicatorVisible(true)
+      this.setState({ status: 'loading' })
+    }
   }
   render () {
     return (
       <SafeAreaView style={styles.container}>
-        <StatusBar />
+        <StatusBar barStyle='light-content' />
         <MenuProvider>
           <View style={styles.navbar}>
             <PageIndicator status={this.state.status} />
