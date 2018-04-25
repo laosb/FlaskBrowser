@@ -11,8 +11,8 @@ export default class App extends React.Component {
   constructor () {
     super()
     this.state = {
-      typingUrl: '',
-      updatedUrl: '',
+      typingUrl: 'https://google.com',
+      updatedUrl: 'https://google.com',
       url: 'https://google.com',
       status: 'loading'
     }
