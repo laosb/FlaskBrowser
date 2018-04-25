@@ -33,7 +33,7 @@ const PageIndicator = props =>
     </MenuTrigger>
     <MenuOptions>
       <View style={styles.popover}>
-        <Text style={[commonStyles.font, { fontWeight: 'bold', color: colorMap[props.status] }]}>
+        <Text style={[commonStyles.font, { fontWeight: 'bold', color: colorMap[props.status], paddingBottom: 5 }]}>
           {I18n.t('pageStatus.title.' + props.status)}
         </Text>
         <Text>
@@ -45,7 +45,7 @@ const PageIndicator = props =>
 
 const styles = StyleSheet.create({
   popover: {
-    padding: 5
+    padding: 13
   },
   indicator: {}
 })

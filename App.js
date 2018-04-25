@@ -108,6 +108,9 @@ const styles = StyleSheet.create({
     marginRight: StyleConstants.navbarSpacing,
     padding: 3,
     borderRadius: 2,
+    // Reset shadows for iOS only.
+    shadowRadius: 0,
+    shadowOffset: { width: 0, height: 0 },
     elevation: 2, // Android
     shadowOpacity: 1
   }
